@@ -11,8 +11,8 @@ import org.springframework.data.elasticsearch.core.convert.ElasticsearchConverte
 public class ElasticsearchConfiguration {
 
     @Bean
-    ElasticsearchRestTemplate elasticsearchTemplate(RestHighLevelClient client, ElasticsearchConverter converter,
-                                                    ResultsMapper resultsMapper) {
+    public ElasticsearchRestTemplate elasticsearchTemplate(RestHighLevelClient client, ElasticsearchConverter converter,
+                                                           ResultsMapper resultsMapper) {
         return new ElasticsearchRestTemplate(client, converter, resultsMapper);
     }
 

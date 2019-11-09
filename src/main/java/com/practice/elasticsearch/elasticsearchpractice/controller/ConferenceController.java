@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 
 /**
  * @author Luo Bao Ding
@@ -17,9 +16,7 @@ import java.util.List;
  */
 @RestController
 public class ConferenceController {
-
     private final ConferenceRepository conferenceRepository;
-
 
     public ConferenceController(ConferenceRepository conferenceRepository) {
         this.conferenceRepository = conferenceRepository;
