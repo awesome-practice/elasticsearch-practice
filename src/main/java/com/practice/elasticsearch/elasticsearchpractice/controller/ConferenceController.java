@@ -4,6 +4,7 @@ import com.practice.elasticsearch.elasticsearchpractice.model.Conference;
 import com.practice.elasticsearch.elasticsearchpractice.repository.ConferenceRepository;
 import org.elasticsearch.index.query.FuzzyQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,7 +35,8 @@ public class ConferenceController {
 
     @GetMapping("/searchName")
     public Iterable<Conference> search(@RequestParam("name") String name) {
-        QueryBuilder query=new FuzzyQueryBuilder("name",name);
+//        QueryBuilder query=new FuzzyQueryBuilder("name",name);
+        QueryBuilder query= QueryBuilders.fuzzyQuery("name", name);
        return conferenceRepository.search(query);
     }
 }
