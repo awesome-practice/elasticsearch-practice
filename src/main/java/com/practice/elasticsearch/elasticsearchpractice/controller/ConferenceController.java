@@ -3,6 +3,7 @@ package com.practice.elasticsearch.elasticsearchpractice.controller;
 import com.practice.elasticsearch.elasticsearchpractice.model.Conference;
 import com.practice.elasticsearch.elasticsearchpractice.repository.ConferenceRepository;
 import org.elasticsearch.index.query.FuzzyQueryBuilder;
+import org.elasticsearch.index.query.PrefixQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,10 +34,23 @@ public class ConferenceController {
         conferenceRepository.save(conference);
     }
 
-    @GetMapping("/searchName")
-    public Iterable<Conference> search(@RequestParam("name") String name) {
-//        QueryBuilder query=new FuzzyQueryBuilder("name",name);
-        QueryBuilder query= QueryBuilders.fuzzyQuery("name", name);
-       return conferenceRepository.search(query);
+    @GetMapping("/fuzzy")
+    public Iterable<Conference> fuzzy(@RequestParam("name") String name) {
+       return conferenceRepository.search(QueryBuilders.fuzzyQuery("name", name));
+    }
+
+    @GetMapping("/search")
+    public Iterable<Conference> search(@RequestParam("tag") String tag,@RequestParam("value") String value) {
+        if ("prefix".equals(tag)) {
+           return conferenceRepository.search(QueryBuilders.prefixQuery("name", value));
+        }
+        if("fuzzy".equals(tag)){
+            return conferenceRepository.search(QueryBuilders.fuzzyQuery("name", value));
+        }
+        if ("match".equals(tag)) {
+            return conferenceRepository.search(QueryBuilders.matchQuery("name", value));
+        }
+
+        return null;
     }
 }
