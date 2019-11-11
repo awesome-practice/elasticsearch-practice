@@ -40,7 +40,8 @@ public class ConferenceController {
     }
 
     @GetMapping("/search")
-    public Iterable<Conference> search(@RequestParam("tag") String tag,@RequestParam("value") String value) {
+    public Iterable<Conference> search(@RequestParam(name="tag",required = false) String tag,
+                                       @RequestParam(name="value",required = false) String value) {
         if ("prefix".equals(tag)) {
            return conferenceRepository.search(QueryBuilders.prefixQuery("name", value));
         }
