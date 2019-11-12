@@ -6,6 +6,7 @@ import org.elasticsearch.index.query.FuzzyQueryBuilder;
 import org.elasticsearch.index.query.PrefixQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 /**
+ * java client文档见： https://www.elastic.co/guide/en/elasticsearch/client/java-rest/6.7/java-rest-high.html
+ *
  * @author Luo Bao Ding
  * @since 2019/11/8
  */
@@ -52,6 +55,9 @@ public class ConferenceController {
             return conferenceRepository.search(QueryBuilders.matchQuery("name", value));
         }
 
+        /*
+       聚合搜索见：  https://www.elastic.co/guide/en/elasticsearch/client/java-rest/6.7/java-rest-high-aggregation-builders.html
+         */
         return null;
     }
 }
