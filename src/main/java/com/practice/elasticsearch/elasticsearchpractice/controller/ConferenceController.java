@@ -2,11 +2,7 @@ package com.practice.elasticsearch.elasticsearchpractice.controller;
 
 import com.practice.elasticsearch.elasticsearchpractice.model.Conference;
 import com.practice.elasticsearch.elasticsearchpractice.repository.ConferenceRepository;
-import org.elasticsearch.index.query.FuzzyQueryBuilder;
-import org.elasticsearch.index.query.PrefixQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Luo Bao Ding
  * @since 2019/11/8
  */
-@RestController
+@RestController("/Conference")
 public class ConferenceController {
     private final ConferenceRepository conferenceRepository;
 

@@ -16,34 +16,33 @@
 package com.practice.elasticsearch.elasticsearchpractice;
 
 import com.practice.elasticsearch.elasticsearchpractice.model.Conference;
-import org.junit.ClassRule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.query.Criteria;
 import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
 
 /**
  * Test case to show Spring Data Elasticsearch functionality.
  *
  * @author Christoph Strobl
  */
-@RunWith(SpringRunner.class)
+//@RunWith(SpringRunner.class)
 @SpringBootTest(classes = ElasticsearchPracticeApplication.class)
+@ExtendWith(SpringExtension.class)
 public class ElasticsearchOperationsTest {
-    @ClassRule
-    public static ElasticsearchAvailable elasticsearchAvailable = ElasticsearchAvailable.onLocalhost();
+//    @ClassRule
+//    public static ElasticsearchAvailable elasticsearchAvailable = ElasticsearchAvailable.onLocalhost();
 
     private static final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
