@@ -52,5 +52,8 @@ public class Media {
     @Field(type = FieldType.Boolean)
     private Boolean isCopiedToPlatform;
 
+    private Float testFloat;
+    private Double testDouble;
+
 
 }
