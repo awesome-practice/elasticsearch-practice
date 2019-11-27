@@ -5,4 +5,5 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
 
 public interface MediaRepository extends ElasticsearchRepository<Media, Long> {
 
+    Media findByResourceId(long resourceId);
 }

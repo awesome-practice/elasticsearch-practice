@@ -36,7 +36,6 @@ public class Media {
     @Field(type = FieldType.Date)
     private Date testWithAnnotationDate;
 
-
     private Byte rank;
     @Field(type = FieldType.Byte)
     private byte libraryTypeMarker;
@@ -49,10 +48,9 @@ public class Media {
     @Field(type = FieldType.Boolean)
     private boolean isCopiedToTenant;
     private Boolean isCopiedToTenant2;
+    private boolean isCopiedToTenant3;
     @Field(type = FieldType.Boolean)
     private Boolean isCopiedToPlatform;
-
-
 
 
 }

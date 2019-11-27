@@ -47,6 +47,7 @@ public class MediaDataInitialization {
                 .isOnShelf(true)
                 .isCopiedToTenant(false)
                 .isCopiedToTenant2(false)
+                .isCopiedToTenant3(false)
                 .build());
         repository.index(Media.builder().resourceId(2L)
                 .filename("family_photo.png")

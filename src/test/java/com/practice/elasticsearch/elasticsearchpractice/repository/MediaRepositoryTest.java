@@ -25,4 +25,10 @@ class MediaRepositoryTest {
 
 
     }
+
+    @Test
+    void get() {
+        Media media = mediaRepository.findByResourceId(1);
+        System.out.println(media);
+    }
 }
