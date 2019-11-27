@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 
 @Component
@@ -31,6 +32,11 @@ public class MediaDataInitialization {
     public void init() {
         repository.deleteAll();
         template.refresh(Media.class);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, 2019);
+        calendar.set(Calendar.MONTH, 5);
+
         repository.index(Media.builder().resourceId(1L)
                 .memberId(1L)
                 .filename("meeting_photo.png")
@@ -40,8 +46,8 @@ public class MediaDataInitialization {
                 .faceLabels(Arrays.asList("Jam", "Tom", "Marry"))
                 .startDate("2019-07-10")
                 .endDate("2019-07-11")
-                .testDate(new Date())
-                .testWithAnnotationDate(new Date())
+                .testDate(calendar.getTime())
+                .testWithAnnotationDate(calendar.getTime())
                 .rank((byte) 5)
                 .libraryTypeMarker((byte) 1)
                 .isOnShelf(true)

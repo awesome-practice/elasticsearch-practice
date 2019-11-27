@@ -46,7 +46,7 @@ public class Media {
 
     private Boolean isOnShelf;
     @Field(type = FieldType.Boolean)
-    private boolean isCopiedToTenant;
+    private Boolean isCopiedToTenant;
     private Boolean isCopiedToTenant2;
     private boolean isCopiedToTenant3;
     @Field(type = FieldType.Boolean)
