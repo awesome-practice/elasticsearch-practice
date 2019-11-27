@@ -48,7 +48,7 @@ public class Media {
     @Field(type = FieldType.Boolean)
     private Boolean isCopiedToTenant;
     private Boolean isCopiedToTenant2;
-    private boolean isCopiedToTenant3;
+    private Boolean isCopiedToTenant3;//boolean no effect
     @Field(type = FieldType.Boolean)
     private Boolean isCopiedToPlatform;
 
