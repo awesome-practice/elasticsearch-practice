@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,5 +33,22 @@ class MediaFilterSearchImplTest {
         }
 
 
+    }
+
+    @Test
+    void deleteByIdBatch() {
+        count();
+        mediaRepository.deleteByIdBatch(Arrays.asList(1L, 2L));
+        count();
+
+    }
+
+    private void count() {
+        Iterable<Media> all = mediaRepository.findAll();
+        int count=0;
+        for (Media media : all) {
+            count++;
+        }
+        System.out.println("count = " + count);
     }
 }

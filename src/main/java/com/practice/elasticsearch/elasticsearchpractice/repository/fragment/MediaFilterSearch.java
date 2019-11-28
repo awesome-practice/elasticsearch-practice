@@ -13,4 +13,6 @@ public interface MediaFilterSearch {
 
     Iterable<Media> filterSearch();
 
+    void deleteByIdBatch(List<Long> ids);
+
 }

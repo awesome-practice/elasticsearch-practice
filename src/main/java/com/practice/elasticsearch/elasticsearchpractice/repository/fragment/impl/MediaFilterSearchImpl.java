@@ -2,8 +2,10 @@ package com.practice.elasticsearch.elasticsearchpractice.repository.fragment.imp
 
 import com.practice.elasticsearch.elasticsearchpractice.model.Media;
 import com.practice.elasticsearch.elasticsearchpractice.repository.fragment.MediaFilterSearch;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
+import org.springframework.data.elasticsearch.core.query.DeleteQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.stereotype.Component;
@@ -62,5 +64,15 @@ public class MediaFilterSearchImpl implements MediaFilterSearch {
         AggregatedPage<Media> medias = template.queryForPage(searchQuery, Media.class);
         return medias;
 
+    }
+
+    @Override
+    public void deleteByIdBatch(List<Long> ids) {
+        DeleteQuery deleteQuery=new DeleteQuery();
+        deleteQuery.setQuery(QueryBuilders.boolQuery().filter(
+                QueryBuilders.termsQuery("resourceId", ids)
+        ));
+
+        template.delete(deleteQuery,Media.class);
     }
 }
