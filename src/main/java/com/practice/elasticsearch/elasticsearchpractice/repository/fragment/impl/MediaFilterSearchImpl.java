@@ -105,12 +105,7 @@ public class MediaFilterSearchImpl implements MediaFilterSearch {
                 .withClass(Media.class)
                 .withUpdateRequest(
                         new UpdateRequest()
-                                .script(
-                                        new Script("ctx._source.filename="
-                                                + "\""
-                                                + filename
-                                                + "\""
-                                        )))
+                                .script(new Script("ctx._source.filename=\""+ filename + "\"")))
                 .build());
     }
 }
