@@ -1,7 +1,6 @@
 package com.practice.elasticsearch.elasticsearchpractice.repository.fragment;
 
 import com.practice.elasticsearch.elasticsearchpractice.model.Media;
-import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
 
 import java.util.List;
 
@@ -14,5 +13,9 @@ public interface MediaFilterSearch {
     Iterable<Media> filterSearch();
 
     void deleteByIdBatch(List<Long> ids);
+
+    void updateFilenameByDoc(Long resourceId, String filename);
+
+    void updateFilenameByScript(Long resourceId, String filename);
 
 }

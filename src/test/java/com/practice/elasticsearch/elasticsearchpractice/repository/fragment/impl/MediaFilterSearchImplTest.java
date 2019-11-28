@@ -9,10 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Luo Bao Ding
@@ -50,5 +46,18 @@ class MediaFilterSearchImplTest {
             count++;
         }
         System.out.println("count = " + count);
+    }
+
+    @Test
+    void updateFilenameByDoc() {
+        mediaRepository.updateFilenameByDoc(1L, "updateFilenameByDoc");
+
+    }
+
+    @Test
+    void updateFilenameByScript() {
+        mediaRepository.updateFilenameByScript(1L,"updateFilenameByScript2");
+        mediaRepository.refresh();
+
     }
 }

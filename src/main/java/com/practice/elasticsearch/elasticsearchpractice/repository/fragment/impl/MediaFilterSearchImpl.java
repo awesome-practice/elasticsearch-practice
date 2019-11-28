@@ -2,17 +2,19 @@ package com.practice.elasticsearch.elasticsearchpractice.repository.fragment.imp
 
 import com.practice.elasticsearch.elasticsearchpractice.model.Media;
 import com.practice.elasticsearch.elasticsearchpractice.repository.fragment.MediaFilterSearch;
+import lombok.extern.slf4j.Slf4j;
+import org.elasticsearch.action.update.UpdateRequest;
+import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.script.Script;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
-import org.springframework.data.elasticsearch.core.query.DeleteQuery;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
-import org.springframework.data.elasticsearch.core.query.SearchQuery;
+import org.springframework.data.elasticsearch.core.query.*;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
@@ -46,11 +48,11 @@ public class MediaFilterSearchImpl implements MediaFilterSearch {
 
         SearchQuery searchQuery = new NativeSearchQueryBuilder()
                 .withFilter(boolQuery()
-                                .must(termQuery("libraryTypeMarker", (byte) 1))
-                                .must(termQuery("isOnShelf", true))
-                                .must(termQuery("isCopiedToTenant2", false))
-                                .must(termQuery("isCopiedToTenant", false))
-                                .must(termQuery("rank", 5))
+                        .must(termQuery("libraryTypeMarker", (byte) 1))
+                        .must(termQuery("isOnShelf", true))
+                        .must(termQuery("isCopiedToTenant2", false))
+                        .must(termQuery("isCopiedToTenant", false))
+                        .must(termQuery("rank", 5))
                         .must(rangeQuery("testDate").gte(calendar.toInstant().toEpochMilli()).lte(calendar2.toInstant().toEpochMilli()))
                         .must(rangeQuery("testWithAnnotationDate").gte(calendar.getTime()).lte(calendar2.getTime()))
                 )
@@ -68,11 +70,52 @@ public class MediaFilterSearchImpl implements MediaFilterSearch {
 
     @Override
     public void deleteByIdBatch(List<Long> ids) {
-        DeleteQuery deleteQuery=new DeleteQuery();
+        DeleteQuery deleteQuery = new DeleteQuery();
         deleteQuery.setQuery(QueryBuilders.boolQuery().filter(
                 QueryBuilders.termsQuery("resourceId", ids)
         ));
 
-        template.delete(deleteQuery,Media.class);
+        template.delete(deleteQuery, Media.class);
+    }
+
+    @Override
+    public void updateFilenameByDoc(Long resourceId, String filename) {
+
+        UpdateQueryBuilder updateQueryBuilder = new UpdateQueryBuilder();
+        UpdateRequest updateRequest = new UpdateRequest();
+        try {
+            updateRequest.doc(XContentFactory.jsonBuilder().startObject()
+                    .field("filename", filename)
+                    .endObject());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        updateQueryBuilder.withId(resourceId + "")
+                .withClass(Media.class)
+                .withUpdateRequest(updateRequest);
+
+        template.update(updateQueryBuilder.build());
+    }
+
+    @Override
+    public void updateFilenameByScript(Long resourceId, String filename) {
+        UpdateQueryBuilder updateQueryBuilder = new UpdateQueryBuilder();
+        UpdateRequest updateRequest = new UpdateRequest();
+
+
+        Script script = new Script("ctx._source.filename="
+                +"\""
+                + filename
+                +"\""
+
+        );
+        updateRequest.script(script);
+
+        updateQueryBuilder.withId(resourceId + "")
+                .withClass(Media.class)
+                .withUpdateRequest(updateRequest);
+
+        template.update(updateQueryBuilder.build());
     }
 }
