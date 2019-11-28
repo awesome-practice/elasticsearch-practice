@@ -81,41 +81,36 @@ public class MediaFilterSearchImpl implements MediaFilterSearch {
     @Override
     public void updateFilenameByDoc(Long resourceId, String filename) {
 
-        UpdateQueryBuilder updateQueryBuilder = new UpdateQueryBuilder();
-        UpdateRequest updateRequest = new UpdateRequest();
         try {
-            updateRequest.doc(XContentFactory.jsonBuilder().startObject()
-                    .field("filename", filename)
-                    .endObject());
+            template.update(new UpdateQueryBuilder().withId(resourceId + "")
+                    .withClass(Media.class)
+                    .withUpdateRequest(
+                            new UpdateRequest()
+                                    .doc(
+                                            XContentFactory.jsonBuilder().startObject()
+                                                    .field("filename", filename)
+                                                    .endObject())
+                    )
+                    .build());
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        updateQueryBuilder.withId(resourceId + "")
-                .withClass(Media.class)
-                .withUpdateRequest(updateRequest);
-
-        template.update(updateQueryBuilder.build());
     }
 
     @Override
     public void updateFilenameByScript(Long resourceId, String filename) {
-        UpdateQueryBuilder updateQueryBuilder = new UpdateQueryBuilder();
-        UpdateRequest updateRequest = new UpdateRequest();
-
-
-        Script script = new Script("ctx._source.filename="
-                +"\""
-                + filename
-                +"\""
-
-        );
-        updateRequest.script(script);
-
-        updateQueryBuilder.withId(resourceId + "")
+        template.update(new UpdateQueryBuilder()
+                .withId(resourceId + "")
                 .withClass(Media.class)
-                .withUpdateRequest(updateRequest);
-
-        template.update(updateQueryBuilder.build());
+                .withUpdateRequest(
+                        new UpdateRequest()
+                                .script(
+                                        new Script("ctx._source.filename="
+                                                + "\""
+                                                + filename
+                                                + "\""
+                                        )))
+                .build());
     }
 }
