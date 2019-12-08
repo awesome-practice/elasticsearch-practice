@@ -2,21 +2,22 @@ package com.practice.elasticsearch.elasticsearchpractice.repository.fragment.imp
 
 import com.practice.elasticsearch.elasticsearchpractice.model.Media;
 import com.practice.elasticsearch.elasticsearchpractice.repository.fragment.MediaFilterSearch;
+import org.elasticsearch.action.bulk.BulkRequest;
+import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.update.UpdateRequest;
+import org.elasticsearch.client.RequestOptions;
+import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.script.Script;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
-import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
-import org.springframework.data.elasticsearch.core.query.DeleteQuery;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
-import org.springframework.data.elasticsearch.core.query.SearchQuery;
-import org.springframework.data.elasticsearch.core.query.UpdateQueryBuilder;
+import org.springframework.data.elasticsearch.core.query.*;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -29,10 +30,11 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 @Component
 public class MediaFilterSearchImpl implements MediaFilterSearch {
 
-
+    private final RestHighLevelClient client;
     private final ElasticsearchRestTemplate template;
 
-    public MediaFilterSearchImpl(ElasticsearchRestTemplate template) {
+    public MediaFilterSearchImpl(RestHighLevelClient client, ElasticsearchRestTemplate template) {
+        this.client = client;
         this.template = template;
     }
 
@@ -68,8 +70,7 @@ public class MediaFilterSearchImpl implements MediaFilterSearch {
                 )
                 .withPageable(PageRequest.of(0, 2, Sort.by(Sort.Direction.DESC, "testDate")))
                 .build();
-        AggregatedPage<Media> medias = template.queryForPage(searchQuery, Media.class);
-        return medias;
+        return template.queryForPage(searchQuery, Media.class);
 
     }
 
@@ -82,6 +83,21 @@ public class MediaFilterSearchImpl implements MediaFilterSearch {
 
         template.delete(deleteQuery, Media.class);
     }
+
+    @Override
+    public void deleteByIdsByBulkByNative(List<Long> ids) {
+        BulkRequest request = new BulkRequest(Media.class.getSimpleName().toLowerCase(), "_doc");
+        for (Long id : ids) {
+            request.add(new DeleteRequest().id(id + ""));
+        }
+        try {
+            client.bulk(request, RequestOptions.DEFAULT);
+        } catch (IOException e) {
+            throw new RuntimeException("deleteByIdsByBulkByNative '" + ids + "' exception:", e);
+        }
+
+    }
+
 
     @Override
     public void updateFilenameByDoc(Long resourceId, String filename) {
@@ -98,7 +114,7 @@ public class MediaFilterSearchImpl implements MediaFilterSearch {
                     )
                     .build());
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
 
     }
@@ -112,5 +128,23 @@ public class MediaFilterSearchImpl implements MediaFilterSearch {
                         new UpdateRequest()
                                 .script(new Script("ctx._source.filename=\"" + filename + "\"")))
                 .build());
+    }
+
+    @Override
+    public void updateFilenameByBulk(List<Long> resourceIds, String filename) {
+
+        List<UpdateQuery> updates = new ArrayList<>();
+        for (Long resourceId : resourceIds) {
+            updates.add(new UpdateQueryBuilder()
+                    .withId(resourceId + "")
+                    .withClass(Media.class)
+                    .withUpdateRequest(
+                            new UpdateRequest()
+                                    .script(new Script("ctx._source.filename=\"" + filename + "\"")))
+                    .build());
+        }
+
+        template.bulkUpdate(updates);
+
     }
 }

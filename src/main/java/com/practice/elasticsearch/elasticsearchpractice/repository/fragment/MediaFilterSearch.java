@@ -14,8 +14,12 @@ public interface MediaFilterSearch {
 
     void deleteByIds(List<Long> ids);
 
+    void deleteByIdsByBulkByNative(List<Long> ids);
+
     void updateFilenameByDoc(Long resourceId, String filename);
 
     void updateFilenameByScript(Long resourceId, String filename);
 
+
+    void updateFilenameByBulk(List<Long> resourceIds, String filename);
 }
