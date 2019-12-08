@@ -12,7 +12,7 @@ public interface MediaFilterSearch {
 
     Iterable<Media> filterSearch();
 
-    void deleteByIdBatch(List<Long> ids);
+    void deleteByIds(List<Long> ids);
 
     void updateFilenameByDoc(Long resourceId, String filename);
 

@@ -69,7 +69,7 @@ public class MediaFilterSearchImpl implements MediaFilterSearch {
     }
 
     @Override
-    public void deleteByIdBatch(List<Long> ids) {
+    public void deleteByIds(List<Long> ids) {
         DeleteQuery deleteQuery = new DeleteQuery();
         deleteQuery.setQuery(QueryBuilders.boolQuery().filter(
                 QueryBuilders.termsQuery("resourceId", ids)

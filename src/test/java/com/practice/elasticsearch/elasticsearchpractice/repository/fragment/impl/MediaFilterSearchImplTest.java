@@ -34,7 +34,7 @@ class MediaFilterSearchImplTest {
     @Test
     void deleteByIdBatch() {
         count();
-        mediaRepository.deleteByIdBatch(Arrays.asList(1L, 2L));
+        mediaRepository.deleteByIds(Arrays.asList(1L, 2L));
         count();
 
     }
