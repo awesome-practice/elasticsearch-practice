@@ -2,14 +2,18 @@ package com.practice.elasticsearch.elasticsearchpractice.repository.fragment.imp
 
 import com.practice.elasticsearch.elasticsearchpractice.model.Media;
 import com.practice.elasticsearch.elasticsearchpractice.repository.fragment.MediaFilterSearch;
-import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.script.Script;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
-import org.springframework.data.elasticsearch.core.query.*;
+import org.springframework.data.elasticsearch.core.query.DeleteQuery;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import org.springframework.data.elasticsearch.core.query.SearchQuery;
+import org.springframework.data.elasticsearch.core.query.UpdateQueryBuilder;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -62,6 +66,7 @@ public class MediaFilterSearchImpl implements MediaFilterSearch {
                         .should(matchQuery("detectLabels", "porn"))
                         .should(matchQuery("faceLabels", "Jam"))
                 )
+                .withPageable(PageRequest.of(0, 2, Sort.by(Sort.Direction.DESC, "testDate")))
                 .build();
         AggregatedPage<Media> medias = template.queryForPage(searchQuery, Media.class);
         return medias;
@@ -105,7 +110,7 @@ public class MediaFilterSearchImpl implements MediaFilterSearch {
                 .withClass(Media.class)
                 .withUpdateRequest(
                         new UpdateRequest()
-                                .script(new Script("ctx._source.filename=\""+ filename + "\"")))
+                                .script(new Script("ctx._source.filename=\"" + filename + "\"")))
                 .build());
     }
 }

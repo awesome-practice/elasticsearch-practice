@@ -84,9 +84,52 @@ public class MediaDataInitialization {
                 .faceLabels(Arrays.asList("xjp", "wjb", "lg"))
                 .startDate("2019-10-01")
                 .endDate("2019-10-07")
-                .rank((byte)5)
+                .rank((byte) 5)
                 .testDate(new Date())
                 .build());
+        calendar.add(Calendar.DAY_OF_MONTH, 1);
+        repository.index(Media.builder().resourceId(5L)
+                .memberId(1L)
+                .filename("meeting_photo.png")
+                .keywords(Arrays.asList("good", "red", "big"))
+                .customLabels(Arrays.asList("building", "activity"))
+                .detectLabels(Arrays.asList("porn", "politic"))
+                .faceLabels(Arrays.asList("Jam", "Tom", "Marry"))
+                .startDate("2019-07-10")
+                .endDate("2019-07-11")
+                .testDate(calendar.getTime())
+                .testWithAnnotationDate(calendar.getTime())
+                .rank((byte) 5)
+                .libraryTypeMarker((byte) 1)
+                .isOnShelf(true)
+                .isCopiedToTenant(false)
+                .isCopiedToTenant2(false)
+                .isCopiedToTenant3(false)
+                .testFloat(1.0f)
+                .testDouble(1.0d)
+                .build());
+        calendar.add(Calendar.DAY_OF_MONTH, 1);
+        repository.index(Media.builder().resourceId(6L)
+                .memberId(1L)
+                .filename("meeting_photo.png")
+                .keywords(Arrays.asList("good", "red", "big"))
+                .customLabels(Arrays.asList("building", "activity"))
+                .detectLabels(Arrays.asList("porn", "politic"))
+                .faceLabels(Arrays.asList("Jam", "Tom", "Marry"))
+                .startDate("2019-07-10")
+                .endDate("2019-07-11")
+                .testDate(calendar.getTime())
+                .testWithAnnotationDate(calendar.getTime())
+                .rank((byte) 5)
+                .libraryTypeMarker((byte) 1)
+                .isOnShelf(true)
+                .isCopiedToTenant(false)
+                .isCopiedToTenant2(false)
+                .isCopiedToTenant3(false)
+                .testFloat(1.0f)
+                .testDouble(1.0d)
+                .build());
+
 
         template.refresh(Media.class);
 
