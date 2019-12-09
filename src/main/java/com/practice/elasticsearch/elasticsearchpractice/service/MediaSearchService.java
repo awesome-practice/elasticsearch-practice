@@ -10,7 +10,9 @@ import java.util.List;
  */
 public interface MediaSearchService {
 
-    Iterable<Media> filterSearch();
+    Iterable<Media> searchByFilterByPage();
+
+    Iterable<Media> searchByFilterByPageByFilterSource();
 
     void deleteByIds(List<Long> ids);
 

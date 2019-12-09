@@ -3,6 +3,7 @@ package com.practice.elasticsearch.elasticsearchpractice.service.impl;
 import com.practice.elasticsearch.elasticsearchpractice.model.Media;
 import com.practice.elasticsearch.elasticsearchpractice.repository.MediaRepository;
 import com.practice.elasticsearch.elasticsearchpractice.service.MediaSearchService;
+import lombok.Builder;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.update.UpdateRequest;
@@ -47,7 +48,7 @@ public class MediaSearchServiceImpl implements MediaSearchService {
      * query： keywords,customLabels， ai labels (detectLabels，faceLabels)
      */
     @Override
-    public Iterable<Media> filterSearch() {
+    public Iterable<Media> searchByFilterByPage() {
 
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.YEAR, 2019);
@@ -74,6 +75,23 @@ public class MediaSearchServiceImpl implements MediaSearchService {
                 )
                 .withPageable(PageRequest.of(0, 2, Sort.by(Sort.Direction.DESC, "testDate")))
                 .build();
+        return template.queryForPage(searchQuery, Media.class);
+
+    }
+    @Override
+    public Iterable<Media> searchByFilterByPageByFilterSource() {
+        SearchQuery searchQuery = new NativeSearchQueryBuilder()
+                .withFilter(boolQuery()
+                        .must(termQuery("libraryTypeMarker", (byte) 1))
+                )
+                .withQuery(boolQuery()
+                        .should(matchQuery("keywords", "good"))
+
+                )
+                .withPageable(PageRequest.of(0, 2, Sort.by(Sort.Direction.DESC, "testDate")))
+                .withSourceFilter(new FetchSourceFilterBuilder().withIncludes("resourceId").build())
+                .build();
+
         return template.queryForPage(searchQuery, Media.class);
 
     }

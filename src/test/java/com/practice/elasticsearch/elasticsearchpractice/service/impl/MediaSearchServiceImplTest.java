@@ -1,4 +1,4 @@
-package com.practice.elasticsearch.elasticsearchpractice.service;
+package com.practice.elasticsearch.elasticsearchpractice.service.impl;
 
 import com.practice.elasticsearch.elasticsearchpractice.model.Media;
 import com.practice.elasticsearch.elasticsearchpractice.repository.MediaRepository;
@@ -25,8 +25,8 @@ class MediaSearchServiceImplTest {
     private MediaSearchService mediaSearchService;
 
     @Test
-    void filterSearch() {
-        Iterable<Media> medias = mediaSearchService.filterSearch();
+    void searchByFilterByPage() {
+        Iterable<Media> medias = mediaSearchService.searchByFilterByPage();
 
         for (Media media : medias) {
             System.out.println(media);
@@ -63,5 +63,13 @@ class MediaSearchServiceImplTest {
         mediaSearchService.updateFilenameByScript(1L,"updateFilenameByScript2");
         mediaRepository.refresh();
 
+    }
+
+    @Test
+    void searchByFilterByPageByFilterSource() {
+        Iterable<Media> medias = mediaSearchService.searchByFilterByPageByFilterSource();
+        for (Media media1 : medias) {
+            System.out.println( media1);
+        }
     }
 }
