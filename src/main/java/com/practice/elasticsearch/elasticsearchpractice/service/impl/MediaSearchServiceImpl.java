@@ -1,7 +1,8 @@
-package com.practice.elasticsearch.elasticsearchpractice.repository.fragment.impl;
+package com.practice.elasticsearch.elasticsearchpractice.service.impl;
 
 import com.practice.elasticsearch.elasticsearchpractice.model.Media;
-import com.practice.elasticsearch.elasticsearchpractice.repository.fragment.MediaFilterSearch;
+import com.practice.elasticsearch.elasticsearchpractice.repository.MediaRepository;
+import com.practice.elasticsearch.elasticsearchpractice.service.MediaSearchService;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.update.UpdateRequest;
@@ -28,12 +29,15 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
  * @since 2019/11/27
  */
 @Component
-public class MediaFilterSearchImpl implements MediaFilterSearch {
+public class MediaSearchServiceImpl implements MediaSearchService {
 
+    private final MediaRepository mediaRepository;
     private final RestHighLevelClient client;
     private final ElasticsearchRestTemplate template;
 
-    public MediaFilterSearchImpl(RestHighLevelClient client, ElasticsearchRestTemplate template) {
+
+    public MediaSearchServiceImpl(MediaRepository mediaRepository, RestHighLevelClient client, ElasticsearchRestTemplate template) {
+        this.mediaRepository = mediaRepository;
         this.client = client;
         this.template = template;
     }

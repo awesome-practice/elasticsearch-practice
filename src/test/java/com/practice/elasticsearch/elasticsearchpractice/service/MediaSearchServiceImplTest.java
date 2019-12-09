@@ -1,7 +1,8 @@
-package com.practice.elasticsearch.elasticsearchpractice.repository.fragment.impl;
+package com.practice.elasticsearch.elasticsearchpractice.service;
 
 import com.practice.elasticsearch.elasticsearchpractice.model.Media;
 import com.practice.elasticsearch.elasticsearchpractice.repository.MediaRepository;
+import com.practice.elasticsearch.elasticsearchpractice.service.MediaSearchService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +17,16 @@ import java.util.Arrays;
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @ExtendWith(SpringExtension.class)
-class MediaFilterSearchImplTest {
+class MediaSearchServiceImplTest {
     @Autowired
     private MediaRepository mediaRepository;
 
+    @Autowired
+    private MediaSearchService mediaSearchService;
+
     @Test
     void filterSearch() {
-        Iterable<Media> medias = mediaRepository.filterSearch();
+        Iterable<Media> medias = mediaSearchService.filterSearch();
 
         for (Media media : medias) {
             System.out.println(media);
@@ -34,7 +38,7 @@ class MediaFilterSearchImplTest {
     @Test
     void deleteByIdBatch() {
         count();
-        mediaRepository.deleteByIds(Arrays.asList(1L, 2L));
+        mediaSearchService.deleteByIds(Arrays.asList(1L, 2L));
         count();
 
     }
@@ -50,13 +54,13 @@ class MediaFilterSearchImplTest {
 
     @Test
     void updateFilenameByDoc() {
-        mediaRepository.updateFilenameByDoc(1L, "updateFilenameByDoc");
+        mediaSearchService.updateFilenameByDoc(1L, "updateFilenameByDoc");
 
     }
 
     @Test
     void updateFilenameByScript() {
-        mediaRepository.updateFilenameByScript(1L,"updateFilenameByScript2");
+        mediaSearchService.updateFilenameByScript(1L,"updateFilenameByScript2");
         mediaRepository.refresh();
 
     }

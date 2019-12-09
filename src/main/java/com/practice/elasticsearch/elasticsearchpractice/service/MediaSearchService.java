@@ -1,4 +1,4 @@
-package com.practice.elasticsearch.elasticsearchpractice.repository.fragment;
+package com.practice.elasticsearch.elasticsearchpractice.service;
 
 import com.practice.elasticsearch.elasticsearchpractice.model.Media;
 
@@ -8,7 +8,7 @@ import java.util.List;
  * @author Luo Bao Ding
  * @since 2019/11/27
  */
-public interface MediaFilterSearch {
+public interface MediaSearchService {
 
     Iterable<Media> filterSearch();
 
