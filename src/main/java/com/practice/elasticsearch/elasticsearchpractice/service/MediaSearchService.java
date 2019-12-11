@@ -24,4 +24,6 @@ public interface MediaSearchService {
 
 
     void updateFilenameByBulk(List<Long> resourceIds, String filename);
+
+    void updateByQuery();
 }

@@ -1,5 +1,6 @@
 package com.practice.elasticsearch.elasticsearchpractice.datainitialization;
 
+import com.practice.elasticsearch.elasticsearchpractice.model.Conference;
 import com.practice.elasticsearch.elasticsearchpractice.model.Media;
 import com.practice.elasticsearch.elasticsearchpractice.repository.MediaRepository;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
@@ -30,8 +31,6 @@ public class MediaDataInitialization {
 
     @PostConstruct
     public void init() {
-        repository.deleteAll();
-        template.refresh(Media.class);
 
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.YEAR, 2019);

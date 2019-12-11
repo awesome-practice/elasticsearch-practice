@@ -2,7 +2,6 @@ package com.practice.elasticsearch.elasticsearchpractice.datainitialization;
 
 import com.practice.elasticsearch.elasticsearchpractice.model.Conference;
 import com.practice.elasticsearch.elasticsearchpractice.repository.ConferenceRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.geo.GeoPoint;
 import org.springframework.stereotype.Component;
@@ -17,25 +16,22 @@ import java.util.Arrays;
  */
 @Component
 public class ConferenceEsDataInitialization {
-    private final ElasticsearchRestTemplate elasticsearchOperations;
+    private final ElasticsearchRestTemplate template;
 
     private final ConferenceRepository repository;
 
-    public ConferenceEsDataInitialization(ElasticsearchRestTemplate elasticsearchOperations, ConferenceRepository repository) {
-        this.elasticsearchOperations = elasticsearchOperations;
+    public ConferenceEsDataInitialization(ElasticsearchRestTemplate template, ConferenceRepository repository) {
+        this.template = template;
         this.repository = repository;
     }
 
     @PreDestroy
     public void deleteIndex() {
-        elasticsearchOperations.deleteIndex(Conference.class);
+        template.deleteIndex(Conference.class);
     }
 
     @PostConstruct
     public void insertDataSample() {
-
-        repository.deleteAll();
-        elasticsearchOperations.refresh(Conference.class);
 
         // Save data sample
         repository.save(Conference.builder().date("2014-11-06").name("Spring eXchange 2014 - London")

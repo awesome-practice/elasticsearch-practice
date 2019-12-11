@@ -3,7 +3,6 @@ package com.practice.elasticsearch.elasticsearchpractice.service.impl;
 import com.practice.elasticsearch.elasticsearchpractice.model.Media;
 import com.practice.elasticsearch.elasticsearchpractice.repository.MediaRepository;
 import com.practice.elasticsearch.elasticsearchpractice.service.MediaSearchService;
-import lombok.Builder;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.update.UpdateRequest;
@@ -11,6 +10,10 @@ import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.TermsQueryBuilder;
+import org.elasticsearch.index.reindex.BulkByScrollResponse;
+import org.elasticsearch.index.reindex.UpdateByQueryRequest;
+import org.elasticsearch.index.reindex.UpdateByQueryRequestBuilder;
 import org.elasticsearch.script.Script;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -32,13 +35,13 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 @Component
 public class MediaSearchServiceImpl implements MediaSearchService {
 
-    private final MediaRepository mediaRepository;
+    private final MediaRepository repository;
     private final RestHighLevelClient client;
     private final ElasticsearchRestTemplate template;
 
 
-    public MediaSearchServiceImpl(MediaRepository mediaRepository, RestHighLevelClient client, ElasticsearchRestTemplate template) {
-        this.mediaRepository = mediaRepository;
+    public MediaSearchServiceImpl(MediaRepository repository, RestHighLevelClient client, ElasticsearchRestTemplate template) {
+        this.repository = repository;
         this.client = client;
         this.template = template;
     }
@@ -78,6 +81,7 @@ public class MediaSearchServiceImpl implements MediaSearchService {
         return template.queryForPage(searchQuery, Media.class);
 
     }
+
     @Override
     public Iterable<Media> searchByFilterByPageByFilterSource() {
         SearchQuery searchQuery = new NativeSearchQueryBuilder()
@@ -167,6 +171,31 @@ public class MediaSearchServiceImpl implements MediaSearchService {
         }
 
         template.bulkUpdate(updates);
+
+    }
+
+    /**
+     * problem
+     */
+    @Override
+    public void updateByQuery() {
+        List<Long> resourceIds = new ArrayList<>();
+        resourceIds.add(1L);
+        resourceIds.add(2L);
+        String filename = "xxx";
+
+        UpdateByQueryRequest request = new UpdateByQueryRequest();
+        request.setQuery(termsQuery("resourceId", resourceIds));
+        request.setScript(new Script("ctx._source.filename=\"" + filename + "\""));
+
+        try {
+            /*
+             * 405 Method Not Allowed.  method [POST], allowed: [GET, DELETE, HEAD, PUT]","status":405
+             */
+            template.getClient().updateByQuery(request, RequestOptions.DEFAULT);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 }

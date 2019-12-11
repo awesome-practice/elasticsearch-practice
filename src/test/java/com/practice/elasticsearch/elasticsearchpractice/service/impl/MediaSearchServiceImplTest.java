@@ -45,7 +45,7 @@ class MediaSearchServiceImplTest {
 
     private void count() {
         Iterable<Media> all = mediaRepository.findAll();
-        int count=0;
+        int count = 0;
         for (Media media : all) {
             count++;
         }
@@ -60,7 +60,7 @@ class MediaSearchServiceImplTest {
 
     @Test
     void updateFilenameByScript() {
-        mediaSearchService.updateFilenameByScript(1L,"updateFilenameByScript2");
+        mediaSearchService.updateFilenameByScript(1L, "updateFilenameByScript2");
         mediaRepository.refresh();
 
     }
@@ -69,7 +69,15 @@ class MediaSearchServiceImplTest {
     void searchByFilterByPageByFilterSource() {
         Iterable<Media> medias = mediaSearchService.searchByFilterByPageByFilterSource();
         for (Media media1 : medias) {
-            System.out.println( media1);
+            System.out.println(media1);
         }
     }
+
+    @Test
+    void updateByQuery() {
+        mediaSearchService.updateByQuery();
+
+    }
+
+
 }
